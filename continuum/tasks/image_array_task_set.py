@@ -121,6 +121,9 @@ class ArrayTaskSet(BaseTaskSet):
     def _prepare_data(self, x, y, t):
         if self.trsf is not None:
             x = self.get_task_trsf(t)(x)
-        if not isinstance(x, torch.Tensor):
+        if type(x) is tuple:
+            if not isinstance(x[0], torch.Tensor):
+                x[0] = self._to_tensor(x[0])
+        elif not isinstance(x, torch.Tensor):
             x = self._to_tensor(x)
         return x, y, t
